@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MedsCovered — Find Affordable Medications</title>
+<title>MedsCovered: Find Affordable Medications</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -442,11 +442,307 @@
     text-align: center;
   }
 
+  /* NAV */
+  nav {
+    background: var(--ink);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0 24px;
+  }
+
+  .nav-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4px;
+  }
+
+  .nav-link {
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 10px 12px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    cursor: pointer;
+  }
+
+  .nav-link:hover { color: #fff; }
+  .nav-link.active { color: var(--teal-light); border-bottom-color: var(--teal-light); }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* HOW IT WORKS */
+  .program-grid {
+    max-width: 900px;
+    margin: 24px auto 60px;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+  }
+
+  .program-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
+  }
+
+  .program-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .program-card-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .program-card-drug {
+    font-size: 0.78rem;
+    color: var(--teal);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .program-card-desc {
+    font-size: 0.78rem;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+
+  /* INSTRUCTIONS PAGE */
+  .instructions-wrap {
+    max-width: 700px;
+    margin: 0 auto 60px;
+    padding: 24px 24px 0;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--teal);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .instructions-wrap h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .instructions-wrap .drug-label {
+    color: var(--teal);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .instructions-wrap .who-qualifies {
+    background: var(--teal-pale);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  .instructions-wrap .who-qualifies strong {
+    display: block;
+    color: var(--teal);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
+
+  .instructions-wrap ol {
+    padding-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  .instructions-wrap ol li {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .instructions-wrap .warning-box {
+    background: var(--amber-pale);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+
+  .instructions-wrap .verified {
+    font-size: 0.72rem;
+    color: var(--mid);
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .instructions-link-btn {
+    display: inline-block;
+    background: var(--teal);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* PBM PAGE */
+  .pbm-wrap {
+    max-width: 700px;
+    margin: 0 auto 60px;
+    padding: 32px 24px 0;
+  }
+
+  .pbm-wrap h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .pbm-wrap h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin: 24px 0 8px;
+  }
+
+  .pbm-wrap p {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  .pbm-action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 16px 0 24px;
+  }
+
+  .pbm-action-tile {
+    background: var(--teal-pale);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .pbm-action-tile strong {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--teal);
+    margin-bottom: 4px;
+  }
+
+  .pbm-action-tile p {
+    font-size: 0.78rem;
+    color: var(--ink);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ABOUT PAGE */
+  .about-wrap {
+    max-width: 600px;
+    margin: 0 auto 60px;
+    padding: 40px 24px 0;
+    text-align: center;
+  }
+
+  .about-wrap h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 16px;
+  }
+
+  .about-wrap p {
+    font-size: 0.9rem;
+    line-height: 1.8;
+    color: var(--mid);
+    margin-bottom: 14px;
+  }
+
+  .about-wrap .signature {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    color: var(--teal);
+    margin-top: 24px;
+  }
+
   @media (max-width: 600px) {
     .options-grid { grid-template-columns: 1fr 1fr; }
     .apply-cta { flex-direction: column; align-items: flex-start; }
     .card-header { flex-direction: column; }
+    .program-grid { grid-template-columns: 1fr; }
   }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #f0f0f0;
+      --paper: #1a1a2e;
+      --cream: #252540;
+      --mid: #a0aec0;
+      --border: #3a3a5c;
+    }
+    header, nav { background: #0d0d1a; }
+    .hero { background: #0d0d1a; }
+    .med-card, .program-card, .pbm-action-tile { background: #252540; border-color: #3a3a5c; }
+    .card-header { border-bottom-color: #3a3a5c; }
+    .tags-row { border-top-color: #3a3a5c; }
+    .filter-btn { background: #252540; border-color: #3a3a5c; color: #f0f0f0; }
+    .sort-select { background: #252540; border-color: #3a3a5c; color: #f0f0f0; }
+    .search-input { background: #252540; color: #f0f0f0; }
+    .option-tile.free { background: #1a3a2a; border-color: #2d6a4a; }
+    .option-tile.cheap { background: #3a2a0a; border-color: #6a4a0d; }
+    .option-tile.moderate { background: #1a1a3a; border-color: #3a3a6a; }
+    .option-tile.expensive { background: #3a1a1a; border-color: #6a2a2a; }
+    .clinical-note { background: #252540; border-left-color: var(--teal-light); color: #f0f0f0; }
+    .who-qualifies { background: #0d3330 !important; color: #e0e0e0 !important; }
+    .who-qualifies strong { color: var(--teal-light) !important; }
+    .warning-box { background: #2a1f00 !important; color: #e0e0e0 !important; }
+    .option-tile.free { background: #0d2a1a !important; border-color: #1a5a3a !important; color: #e0e0e0 !important; }
+    .option-tile.cheap { background: #2a1f00 !important; border-color: #5a3a00 !important; color: #e0e0e0 !important; }
+    .option-tile.moderate { background: #0d0d2a !important; border-color: #2a2a5a !important; color: #e0e0e0 !important; }
+    .option-tile.expensive { background: #2a0d0d !important; border-color: #5a1a1a !important; color: #e0e0e0 !important; }
+    .program-card-desc { color: #a0aec0; }
+    .brand-name { color: #a0aec0; }
+    .option-type { color: inherit; }
+    .option-detail { color: #a0aec0; }
+    .option-cost { color: #f0f0f0; }
+    .instructions-wrap .drug-label { color: var(--teal-light); }
+    .instructions-wrap ol li { color: #f0f0f0; }
+    .pbm-wrap p { color: #e0e0e0; }
+    .about-wrap p { color: #a0aec0; }
+    .drug-class-badge { background: #1a3a3a; }
+    .moa-text { color: #a0aec0; }
+  }
+
 </style>
 </head>
 <body>
@@ -458,8 +754,20 @@
   </div>
 </header>
 
+<nav>
+  <div class="nav-inner">
+    <a class="nav-link active" onclick="showPage('home')">Search</a>
+    <a class="nav-link" onclick="showPage('how')">How It Works</a>
+    <a class="nav-link" onclick="showPage('pbm')">About PBMs</a>
+    
+  </div>
+</nav>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+
 <div class="hero">
-  <h1>Find out what your<br>medication <em>actually</em> costs.</h1>
+  <h1>Search for your<br>medication</h1>
   <p>Most people don't know about patient assistance programs, generic alternatives, or discount options. We put it all in one place so you can stop overpaying.</p>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
@@ -493,6 +801,8 @@
     <button class="filter-btn" data-category="oud">OUD/AUD</button>
     <button class="filter-btn" data-category="hormone">Hormones</button>
     <button class="filter-btn" data-category="derm">Derm</button>
+    <button class="filter-btn" data-category="dme">DME & Supplies</button>
+  </div>
   </div>
 </div>
 
@@ -513,14 +823,82 @@
 </div>
 
 <div class="disclaimer">
-  Prices and program eligibility change — always double check directly with the manufacturer or pharmacy before making decisions. We're not a pharmacy, insurer, or anything fancy. Just trying to help. Last updated May 2026.
+  Prices and program eligibility change, always double check directly with the manufacturer or pharmacy before making decisions. We're not a pharmacy, insurer, or anything fancy. Just trying to help. Last updated May 2026.
+</div>
+
+</div><!-- end home page -->
+
+<!-- HOW IT WORKS PAGE -->
+<div id="page-how" class="page">
+  <div style="max-width:900px;margin:32px auto 16px;padding:0 24px;">
+    <h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:8px;">How to get your medication covered</h2>
+    <p style="font-size:0.88rem;color:var(--mid);line-height:1.6;">Click any program below for step-by-step instructions on how to apply and what you need.</p>
+  </div>
+  <div class="program-grid" id="programGrid"></div>
+</div>
+
+<!-- INSTRUCTIONS PAGE (populated dynamically) -->
+<div id="page-instructions" class="page">
+  <div class="instructions-wrap" id="instructionsContent"></div>
+</div>
+
+<!-- PBM PAGE -->
+<div id="page-pbm" class="page">
+  <div class="pbm-wrap">
+    <h2>What are PBMs, and why do they matter?</h2>
+    <p>Pharmacy Benefit Managers, or PBMs, are companies that sit between your insurance plan and your pharmacy. On paper, they negotiate drug prices on behalf of insurers. In practice, the way they operate often results in higher costs for patients and less transparency about where the money actually goes.</p>
+    <p>The three largest PBMs, Express Scripts, CVS Caremark, and OptumRx, together manage pharmacy benefits for most Americans. Because they control so much of the market, they have enormous influence over which drugs get covered, at what price, and at which pharmacies.</p>
+
+    <h3>How PBMs affect your prescription costs</h3>
+    <p>When a drug manufacturer pays a PBM a rebate to get their drug on a preferred formulary tier, the PBM doesn't always pass those savings to patients. Instead, patients may pay high copays for drugs that the insurer is actually getting a large rebate on. The net result: you pay more than necessary at the pharmacy counter, and it's very difficult to know why.</p>
+    <p>PBMs also use practices like spread pricing, charging insurers more for a drug than they pay the pharmacy, and keeping the difference. This is a significant source of PBM revenue that patients and employers rarely see.</p>
+    <p>The Federal Trade Commission released a report in 2024 finding that the largest PBMs were inflating drug costs and steering patients toward their own affiliated pharmacies, even when cheaper options were available.</p>
+
+    <h3>What's being done about it</h3>
+    <p>PBM reform has rare bipartisan support in Congress. Both Republican and Democratic legislators have introduced bills requiring greater transparency in rebate reporting, limiting spread pricing in Medicaid, and preventing PBMs from favoring their own affiliated pharmacies. Several states have passed their own PBM transparency laws. The process is slow, but momentum is real.</p>
+
+    <h3>What you can do right now</h3>
+    <div class="pbm-action-grid">
+      <div class="pbm-action-tile">
+        <strong>Use Cost Plus Drugs</strong>
+        <p>Mark Cuban's pharmacy bypasses PBMs entirely. Transparent pricing, no middleman. Often dramatically cheaper than going through insurance.</p>
+      </div>
+      <div class="pbm-action-tile">
+        <strong>Check GoodRx first</strong>
+        <p>Sometimes the cash price with a GoodRx coupon is lower than your insurance copay. Always compare before paying.</p>
+      </div>
+      <div class="pbm-action-tile">
+        <strong>Ask for generics</strong>
+        <p>Generic drugs have the same active ingredients as brand names. They bypass many of the formulary games PBMs play with brand manufacturers.</p>
+      </div>
+      <div class="pbm-action-tile">
+        <strong>Apply for PAPs</strong>
+        <p>Patient Assistance Programs from manufacturers provide free or reduced-cost medications directly, completely outside the PBM system.</p>
+      </div>
+      <div class="pbm-action-tile">
+        <strong>Use this database</strong>
+        <p>MedsCovered exists specifically to help you find every option that routes around the PBM model. Search any medication to get started.</p>
+      </div>
+      <div class="pbm-action-tile">
+        <strong>Talk to your doctor</strong>
+        <p>Ask your physician to prescribe the most affordable equivalent. Therapeutic substitution to a cheaper drug in the same class is often clinically appropriate.</p>
+      </div>
+    </div>
+    <p style="font-size:0.78rem;color:var(--mid);">Sources: FTC Pharmacy Benefit Managers Report (2024), PCMA, Kaiser Family Foundation, Congressional Research Service.</p>
+  </div>
+</div>
+
+
+  </div>
 </div>
 
 <script>
 // ============ GOOGLE SHEETS CONFIG ============
-// 1. In Google Sheets: File > Share > Publish to web > CSV > Sheet1 > Publish
-// 2. Copy the URL and paste it below
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_M9CxWXORBPdQpJE8TXP_oenqVPiyVmrdScDvFGCLaPi1jZjAr_Uwkoney6PX2c05LsusmbnGnUM7/pub?gid=365037881&single=true&output=csv';
+// Three published CSV URLs, one per sheet
+// To update: File > Share > Publish to web > select sheet > CSV > Publish
+const SHEET_MEDS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_M9CxWXORBPdQpJE8TXP_oenqVPiyVmrdScDvFGCLaPi1jZjAr_Uwkoney6PX2c05LsusmbnGnUM7/pub?gid=365037881&single=true&output=csv';
+const SHEET_OPTIONS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_M9CxWXORBPdQpJE8TXP_oenqVPiyVmrdScDvFGCLaPi1jZjAr_Uwkoney6PX2c05LsusmbnGnUM7/pub?gid=1515050836&single=true&output=csv';
+const SHEET_PAP_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_M9CxWXORBPdQpJE8TXP_oenqVPiyVmrdScDvFGCLaPi1jZjAr_Uwkoney6PX2c05LsusmbnGnUM7/pub?gid=593760018&single=true&output=csv';
 
 let MEDS = [];
 let activeInsurance = "all";
@@ -563,7 +941,7 @@ function buildSmartURL(type, link, generic) {
   const drug = encodeURIComponent(generic.toLowerCase().split('/')[0].trim().split(' ')[0]);
   const t = type.toLowerCase();
   if (t.includes('cost plus')) return `https://costplusdrugs.com/medications/?search=${drug}`;
-  if (t.includes('goodrx') || t.includes('generic cash') || t.includes('generic +')) 
+  if (t.includes('goodrx') || t.includes('generic cash') || t.includes('generic +'))
     return `https://www.goodrx.com/${drug}`;
   if (t.includes('medicare')) return 'https://www.medicare.gov/drug-coverage-part-d';
   if (t.includes('walmart')) return 'https://www.walmart.com/pharmacy';
@@ -578,7 +956,8 @@ function buildLinkText(type, link) {
   if (t.includes('walmart') || t.includes('otc')) return 'Walmart Pharmacy';
   if (t.includes('medi-cal')) return 'medi-calrx.dhcs.ca.gov';
   if (t.includes('novocare') || t.includes('novo nordisk')) return 'novocare.com';
-  if (t.includes('lillycares') || t.includes('lilly')) return 'lillycares.com';
+  if (t.includes('lillycares')) return 'lillycares.com';
+  if (t.includes('lillydirect') || t.includes('lillycard')) return 'lillydirect.com';
   if (t.includes('azandme') || t.includes('az&me')) return 'azandmeapp.com';
   if (t.includes('bms') || t.includes('bmspaf')) return 'bms.com';
   if (t.includes('bi cares') || t.includes('boehringer')) return 'boehringer-ingelheim.com';
@@ -588,60 +967,75 @@ function buildLinkText(type, link) {
   if (t.includes('prescription hope')) return 'prescriptionhope.com';
   if (t.includes('vivitrol')) return 'vivitrol.com';
   if (t.includes('indivior') || t.includes('suboxone')) return 'suboxone.com';
-  if (t.includes('lillydirect') || t.includes('lillycard')) return 'lillydirect.com';
-  if (link) {
-    try { return new URL(link).hostname.replace('www.', ''); } catch(e) {}
-  }
+  if (link) { try { return new URL(link).hostname.replace('www.', ''); } catch(e) {} }
   return 'Learn more';
 }
 
-// ============ TRANSFORM CSV ROW TO MED OBJECT ============
-function rowToMed(row) {
-  const options = [];
-  for (let i = 1; i <= 4; i++) {
-    if (row[`option${i}_type`]) {
-      const type = row[`option${i}_type`];
-      const link = row[`option${i}_link`];
-      const generic = row.generic || '';
-      options.push({
-        type,
-        cost: row[`option${i}_cost`],
-        detail: row[`option${i}_detail`],
-        link: buildSmartURL(type, link, generic),
-        linkText: buildLinkText(type, link),
-        tier: row[`option${i}_tier`]
-      });
-    }
-  }
-  return {
-    id: parseInt(row.id),
-    category: row.category,
-    generic: row.generic,
-    brand: row.brand,
-    drugClass: row.drugClass,
-    moa: row.moa,
-    indication: row.indication,
-    medicaid: row.medicaid === 'true',
-    generic_avail: row.generic_avail === 'true',
-    costTier: row.costTier,
-    options,
-    tags: row.tags ? row.tags.split(' | ') : [],
-    note: row.note,
-    pap: row.pap === 'true',
-    papName: row.papName,
-    papContact: row.papContact
-  };
-}
+let PAP_PROGRAMS = [];
 
-// ============ LOAD DATA ============
+// ============ LOAD DATA (three sheets) ============
 async function loadData() {
   showLoading();
   try {
-    const res = await fetch(SHEET_CSV_URL);
-    if (!res.ok) throw new Error('Failed to fetch');
-    const text = await res.text();
-    const rows = parseCSV(text);
-    MEDS = rows.map(rowToMed).filter(m => m.generic);
+    const [medsRes, optsRes, papRes] = await Promise.all([
+      fetch(SHEET_MEDS_URL),
+      fetch(SHEET_OPTIONS_URL),
+      fetch(SHEET_PAP_URL)
+    ]);
+    if (!medsRes.ok || !optsRes.ok || !papRes.ok) throw new Error('Failed to fetch');
+
+    const [medsText, optsText, papText] = await Promise.all([
+      medsRes.text(), optsRes.text(), papRes.text()
+    ]);
+
+    const medRows = parseCSV(medsText);
+    const optRows = parseCSV(optsText);
+    const papRows = parseCSV(papText);
+
+    // Store PAP programs globally
+    PAP_PROGRAMS = papRows.filter(r => r.program_id);
+
+    // Build options lookup by drug_id
+    const optsMap = {};
+    optRows.forEach(opt => {
+      if (!optsMap[opt.drug_id]) optsMap[opt.drug_id] = [];
+      optsMap[opt.drug_id].push(opt);
+    });
+
+    // Join medications with their options
+    MEDS = medRows
+      .filter(row => row.generic)
+      .map(row => {
+        const rawOpts = optsMap[row.id] || [];
+        const options = rawOpts.map(opt => ({
+          type: opt.type,
+          cost: opt.cost,
+          detail: opt.detail,
+          link: buildSmartURL(opt.type, opt.link, row.generic),
+          linkText: buildLinkText(opt.type, opt.link),
+          tier: opt.tier
+        }));
+        return {
+          id: parseInt(row.id),
+          category: row.category,
+          generic: row.generic,
+          brand: row.brand,
+          drugClass: row.drugClass,
+          moa: row.moa,
+          indication: row.indication,
+          medicaid: row.medicaid === 'true',
+          generic_avail: row.generic_avail === 'true',
+          costTier: row.costTier,
+          options,
+          tags: row.tags ? row.tags.split(' | ') : [],
+          note: row.note,
+          pap: row.pap === 'true',
+          papName: row.papName,
+          papContact: row.papContact
+        };
+      });
+
+    renderProgramGrid();
     render();
   } catch (err) {
     console.error('Error loading data:', err);
@@ -775,10 +1169,10 @@ function renderCard(med, index) {
   const papCTA = med.pap ? `
     <div class="apply-cta">
       <div class="apply-cta-text">
-        <strong>Patient Assistance Program — We Can Apply For You</strong>
+        <strong>Patient Assistance Program, We Can Apply For You</strong>
         ${med.papName} · ${med.papContact}
       </div>
-      <button class="apply-btn" onclick="alert('Coming soon — we\'ll handle the paperwork for you.')">Apply — Coming Soon →</button>
+      <button class="apply-btn" onclick="alert('Coming soon, we\'ll handle the paperwork for you.')">Apply, Coming Soon →</button>
     </div>
   ` : '';
 
@@ -820,7 +1214,62 @@ function render() {
   resultsContainer.innerHTML = filtered.map((med, i) => renderCard(med, i)).join('');
 }
 
-// Initialize — load from Google Sheets
+// ============ PAGE NAVIGATION ============
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  document.querySelector(`[onclick="showPage('${page}')"]`)?.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+
+function renderProgramGrid() {
+  const grid = document.getElementById('programGrid');
+  if (!grid) return;
+  if (!PAP_PROGRAMS.length) {
+    grid.innerHTML = '<p style="padding:24px;color:var(--mid);font-size:0.88rem;">Loading programs...</p>';
+    return;
+  }
+  grid.innerHTML = PAP_PROGRAMS.map(p => {
+    if (p.program_id.startsWith('SECTION_')) {
+      const label = p.program_name.replace('SECTION: ', '');
+      return `<div style="grid-column:1/-1;padding:12px 4px 4px;border-bottom:2px solid var(--teal);margin-top:8px;">
+        <span style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--teal);">${label}</span>
+      </div>`;
+    }
+    return `
+    <div class="program-card" onclick="showInstructions('${p.program_id}')">
+      <div class="program-card-name">${p.program_name}</div>
+      <div class="program-card-drug">${p.drugs}</div>
+      <div class="program-card-desc">${p.tagline}</div>
+    </div>`;
+  }).join('');
+}
+
+function showInstructions(id) {
+  if (id.startsWith('SECTION_')) return;
+  const p = PAP_PROGRAMS.find(x => x.program_id === id);
+  if (!p) return;
+  const steps = [p.step1,p.step2,p.step3,p.step4,p.step5,p.step6,p.step7]
+    .filter(s => s && s.trim());
+  const stepsHTML = steps.map(s => `<li>${s}</li>`).join('');
+  document.getElementById('instructionsContent').innerHTML = `
+    <button class="back-btn" onclick="showPage('how')">Back to all programs</button>
+    <h2>${p.program_name}</h2>
+    <div class="drug-label">${p.drugs}</div>
+    <div class="who-qualifies">
+      <strong>Who qualifies</strong>
+      ${p.who_qualifies}
+    </div>
+    ${p.warning ? `<div class="warning-box">&#9888; ${p.warning}</div>` : ''}
+    <h3 style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:10px;">How to apply, step by step</h3>
+    <ol>${stepsHTML}</ol>
+    <a href="${p.link}" target="_blank" class="instructions-link-btn">${p.link_text}</a>
+    <div class="verified">Last verified: ${p.last_verified}. Program terms change, always confirm eligibility directly with the manufacturer.</div>
+  `;
+  showPage('instructions');
+}
 loadData();
 
 // Re-search on input
