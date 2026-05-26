@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedsCovered — Find Affordable Medications</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1923;
+    --paper: #f7f4ef;
+    --cream: #ede9e1;
+    --teal: #0d7377;
+    --teal-light: #14a085;
+    --teal-pale: #e0f4f3;
+    --amber: #e8900a;
+    --amber-pale: #fff4e0;
+    --red-pale: #fde8e8;
+    --red: #c0392b;
+    --green: #1a7a4a;
+    --green-pale: #e0f5ea;
+    --mid: #6b7280;
+    --border: #d8d3c8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--ink);
+    padding: 20px 24px 18px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 3px solid var(--teal);
+  }
+
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--teal-light); }
+
+  .tagline {
+    font-size: 0.78rem;
+    color: #9ca3af;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--ink);
+    padding: 32px 24px 40px;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--teal-light);
+  }
+
+  .hero p {
+    color: #9ca3af;
+    font-size: 0.9rem;
+    max-width: 480px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+
+  /* SEARCH BAR */
+  .search-wrap {
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 16px 20px 16px 48px;
+    font-size: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .search-input:focus { border-color: var(--teal-light); }
+  .search-input::placeholder { color: #9ca3af; }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--mid);
+    font-size: 1.1rem;
+    pointer-events: none;
+  }
+
+  /* FILTERS */
+  .filters {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 24px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--mid);
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .filter-btn.active {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff;
+  }
+
+  .divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 4px;
+  }
+
+  /* RESULTS */
+  .results-wrap {
+    max-width: 900px;
+    margin: 20px auto 60px;
+    padding: 0 24px;
+  }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .results-count {
+    font-size: 0.82rem;
+    color: var(--mid);
+    font-weight: 500;
+  }
+
+  .sort-label {
+    font-size: 0.78rem;
+    color: var(--mid);
+  }
+
+  /* MED CARD */
+  .med-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .med-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    transform: translateY(-1px);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-header {
+    padding: 16px 20px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    border-bottom: 1px solid var(--cream);
+  }
+
+  .drug-names { flex: 1; }
+
+  .generic-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .brand-name {
+    font-size: 0.78rem;
+    color: var(--mid);
+    margin-top: 2px;
+  }
+
+  .drug-class-badge {
+    background: var(--teal-pale);
+    color: var(--teal);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card-body { padding: 14px 20px; }
+
+  .moa-text {
+    font-size: 0.8rem;
+    color: var(--mid);
+    line-height: 1.5;
+    margin-bottom: 14px;
+    font-style: italic;
+  }
+
+  /* OPTIONS GRID */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .option-tile {
+    border-radius: 10px;
+    padding: 12px 14px;
+    border: 1px solid transparent;
+  }
+
+  .option-tile.free { background: var(--green-pale); border-color: #a7d7bc; }
+  .option-tile.cheap { background: var(--amber-pale); border-color: #f5c97a; }
+  .option-tile.moderate { background: #f0f4ff; border-color: #c7d2fe; }
+  .option-tile.expensive { background: var(--red-pale); border-color: #f5a9a9; }
+
+  .option-type {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .option-tile.free .option-type { color: var(--green); }
+  .option-tile.cheap .option-type { color: #b45309; }
+  .option-tile.moderate .option-type { color: #4338ca; }
+  .option-tile.expensive .option-type { color: var(--red); }
+
+  .option-cost {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 3px;
+  }
+
+  .option-detail {
+    font-size: 0.72rem;
+    color: var(--mid);
+    line-height: 1.4;
+  }
+
+  .option-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--teal);
+    text-decoration: none;
+  }
+  .option-link:hover { text-decoration: underline; }
+
+  /* TAGS ROW */
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--cream);
+  }
+
+  .tag {
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .tag-green { background: var(--green-pale); color: var(--green); }
+  .tag-red { background: var(--red-pale); color: var(--red); }
+  .tag-amber { background: var(--amber-pale); color: #92400e; }
+  .tag-blue { background: #e0f2fe; color: #0369a1; }
+
+  .clinical-note {
+    font-size: 0.75rem;
+    color: var(--ink);
+    background: var(--cream);
+    border-left: 3px solid var(--teal);
+    padding: 8px 12px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--mid);
+  }
+
+  .empty-state .icon { font-size: 3rem; margin-bottom: 12px; }
+  .empty-state h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .empty-state p { font-size: 0.85rem; line-height: 1.6; }
+
+  /* APPLY CTA */
+  .apply-cta {
+    background: linear-gradient(135deg, var(--teal) 0%, #0a5c60 100%);
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .apply-cta-text {
+    color: #fff;
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .apply-cta-text strong { display: block; font-size: 0.95rem; margin-bottom: 2px; }
+
+  .apply-btn {
+    background: #fff;
+    color: var(--teal);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    flex-shrink: 0;
+  }
+
+  .apply-btn:hover { background: var(--teal-pale); }
+
+  /* DISCLAIMER */
+  .disclaimer {
+    max-width: 900px;
+    margin: 0 auto 20px;
+    padding: 0 24px;
+    font-size: 0.72rem;
+    color: var(--mid);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .options-grid { grid-template-columns: 1fr 1fr; }
+    .apply-cta { flex-direction: column; align-items: flex-start; }
+    .card-header { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Meds<span>Covered</span></div>
+    <div class="tagline">Built by a doctor. Free for everyone.</div>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Find out what your<br>medication <em>actually</em> costs.</h1>
+  <p>Most people don't know about patient assistance programs, generic alternatives, or discount options. We put it all in one place so you can stop overpaying.</p>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input 
+      type="text" 
+      class="search-input" 
+      id="searchInput"
+      placeholder="Search by drug name (e.g. metformin, Ozempic, Eliquis...)"
+      autocomplete="off"
+    />
+  </div>
+</div>
+
+<div style="background:#fff; border-bottom: 1px solid var(--border); padding: 14px 24px; text-align:center;">
+  <p style="max-width:700px; margin:0 auto; font-size:0.82rem; color:var(--mid); line-height:1.6;">
+    Built by a family medicine physician who got tired of patients not knowing their options at the pharmacy counter. This is free to use. Always will be. — <strong style="color:var(--ink);">Dr. P</strong>
+  </p>
+</div>
+
+<div class="filters">
+  <span class="filter-label">Insurance:</span>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="uninsured">Uninsured</button>
+  <button class="filter-btn" data-filter="medi-cal">Medi-Cal</button>
+  <button class="filter-btn" data-filter="commercial">Commercial</button>
+  <button class="filter-btn" data-filter="medicare">Medicare</button>
+  <div class="divider"></div>
+  <span class="filter-label">Category:</span>
+  <button class="filter-btn active" data-category="all">All</button>
+  <button class="filter-btn" data-category="diabetes">Diabetes</button>
+  <button class="filter-btn" data-category="inhaler">Inhalers</button>
+  <button class="filter-btn" data-category="doac">Blood Thinners</button>
+  <button class="filter-btn" data-category="weightloss">Weight Loss</button>
+  <button class="filter-btn" data-category="oud">OUD/AUD</button>
+  <button class="filter-btn" data-category="hormone">Hormones</button>
+  <button class="filter-btn" data-category="derm">Derm</button>
+</div>
+
+<div class="results-wrap">
+  <div class="results-header">
+    <span class="results-count" id="resultsCount"></span>
+    <span class="sort-label">Cheapest options first</span>
+  </div>
+  <div id="resultsContainer"></div>
+</div>
+
+<div class="disclaimer">
+  Prices and program eligibility change — always double check directly with the manufacturer or pharmacy before making decisions. We're not a pharmacy, insurer, or anything fancy. Just trying to help. Last updated May 2026.
+</div>
+
+<script>
+// ============ GOOGLE SHEETS CONFIG ============
+// 1. In Google Sheets: File > Share > Publish to web > CSV > Sheet1 > Publish
+// 2. Copy the URL and paste it below
+const SHEET_CSV_URL = 'YOUR_GOOGLE_SHEET_CSV_URL_HERE';
+
+let MEDS = [];
+let activeInsurance = "all";
+let activeCategory = "all";
+let searchQuery = "";
+
+// ============ CSV PARSER ============
+function parseCSV(text) {
+  const lines = text.split('\n');
+  const headers = parseCSVLine(lines[0]);
+  return lines.slice(1).filter(l => l.trim()).map(line => {
+    const vals = parseCSVLine(line);
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i] || '').trim());
+    return obj;
+  });
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') {
+      if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
+      else inQuotes = !inQuotes;
+    } else if (line[i] === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += line[i];
+    }
+  }
+  result.push(current);
+  return result;
+}
+
+// ============ TRANSFORM CSV ROW TO MED OBJECT ============
+function rowToMed(row) {
+  const options = [];
+  for (let i = 1; i <= 4; i++) {
+    if (row[`option${i}_type`]) {
+      options.push({
+        type: row[`option${i}_type`],
+        cost: row[`option${i}_cost`],
+        detail: row[`option${i}_detail`],
+        link: row[`option${i}_link`],
+        tier: row[`option${i}_tier`]
+      });
+    }
+  }
+  return {
+    id: parseInt(row.id),
+    category: row.category,
+    generic: row.generic,
+    brand: row.brand,
+    drugClass: row.drugClass,
+    moa: row.moa,
+    indication: row.indication,
+    medicaid: row.medicaid === 'true',
+    generic_avail: row.generic_avail === 'true',
+    costTier: row.costTier,
+    options,
+    tags: row.tags ? row.tags.split(' | ') : [],
+    note: row.note,
+    pap: row.pap === 'true',
+    papName: row.papName,
+    papContact: row.papContact
+  };
+}
+
+// ============ LOAD DATA ============
+async function loadData() {
+  showLoading();
+  try {
+    const res = await fetch(SHEET_CSV_URL);
+    if (!res.ok) throw new Error('Failed to fetch');
+    const text = await res.text();
+    const rows = parseCSV(text);
+    MEDS = rows.map(rowToMed).filter(m => m.generic);
+    render();
+  } catch (err) {
+    console.error('Error loading data:', err);
+    showError();
+  }
+}
+
+function showLoading() {
+  document.getElementById('resultsContainer').innerHTML = `
+    <div class="empty-state">
+      <div class="icon">⏳</div>
+      <h3>Loading medications...</h3>
+      <p>Fetching the latest data.</p>
+    </div>`;
+  document.getElementById('resultsCount').textContent = '';
+}
+
+function showError() {
+  document.getElementById('resultsContainer').innerHTML = `
+    <div class="empty-state">
+      <div class="icon">⚠️</div>
+      <h3>Couldn't load data</h3>
+      <p>Please try refreshing the page.</p>
+    </div>`;
+}
+
+// ============ APP LOGIC ============
+const searchInput = document.getElementById('searchInput');
+const resultsContainer = document.getElementById('resultsContainer');
+const resultsCount = document.getElementById('resultsCount');
+
+// Filter buttons
+document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn[data-filter]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeInsurance = btn.dataset.filter;
+    render();
+  });
+});
+
+document.querySelectorAll('.filter-btn[data-category]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCategory = btn.dataset.category;
+    render();
+  });
+});
+
+function filterMeds() {
+  return MEDS.filter(med => {
+    const matchSearch = !searchQuery ||
+      med.generic.toLowerCase().includes(searchQuery) ||
+      med.brand.toLowerCase().includes(searchQuery) ||
+      med.drugClass.toLowerCase().includes(searchQuery) ||
+      med.indication.toLowerCase().includes(searchQuery);
+
+    const matchCategory = activeCategory === "all" || med.category === activeCategory;
+
+    let matchInsurance = true;
+    if (activeInsurance === "uninsured") {
+      matchInsurance = med.options.some(o => 
+        o.detail.toLowerCase().includes("uninsured") || 
+        o.detail.toLowerCase().includes("no insurance") ||
+        o.type.toLowerCase().includes("cost plus") ||
+        o.type.toLowerCase().includes("generic cash") ||
+        o.type.toLowerCase().includes("walmart") ||
+        o.type.toLowerCase().includes("pap")
+      );
+    } else if (activeInsurance === "medi-cal") {
+      matchInsurance = med.medicaid;
+    } else if (activeInsurance === "commercial") {
+      matchInsurance = med.options.some(o => 
+        o.detail.toLowerCase().includes("commercial") ||
+        o.type.toLowerCase().includes("savings card") ||
+        o.type.toLowerCase().includes("copay cap")
+      );
+    } else if (activeInsurance === "medicare") {
+      matchInsurance = med.options.some(o =>
+        o.detail.toLowerCase().includes("medicare") ||
+        o.type.toLowerCase().includes("medicare")
+      );
+    }
+
+    return matchSearch && matchCategory && matchInsurance;
+  });
+}
+
+function getTierClass(tier) {
+  const map = { free: "free", cheap: "cheap", moderate: "moderate", expensive: "expensive" };
+  return map[tier] || "moderate";
+}
+
+function renderCard(med, index) {
+  const delay = index * 0.05;
+  const optionsHTML = med.options.map(opt => `
+    <div class="option-tile ${getTierClass(opt.tier)}">
+      <div class="option-type">${opt.type}</div>
+      <div class="option-cost">${opt.cost}</div>
+      <div class="option-detail">${opt.detail}</div>
+      ${opt.link ? `<a href="${opt.link}" target="_blank" class="option-link">→ ${opt.linkText}</a>` : ''}
+    </div>
+  `).join('');
+
+  const tagsHTML = med.tags.map(tag => {
+    let cls = 'tag-blue';
+    if (tag.includes('✅')) cls = 'tag-green';
+    else if (tag.includes('❌')) cls = 'tag-red';
+    else if (tag.includes('⚠️') || tag.includes('💡')) cls = 'tag-amber';
+    return `<span class="tag ${cls}">${tag}</span>`;
+  }).join('');
+
+  const papCTA = med.pap ? `
+    <div class="apply-cta">
+      <div class="apply-cta-text">
+        <strong>Patient Assistance Program — We Can Apply For You</strong>
+        ${med.papName} · ${med.papContact}
+      </div>
+      <button class="apply-btn" onclick="alert('Coming soon — we\'ll handle the paperwork for you.')">Apply — Coming Soon →</button>
+    </div>
+  ` : '';
+
+  return `
+    <div class="med-card" style="animation-delay: ${delay}s">
+      <div class="card-header">
+        <div class="drug-names">
+          <div class="generic-name">${med.generic}</div>
+          <div class="brand-name">${med.brand}</div>
+        </div>
+        <div class="drug-class-badge">${med.drugClass}</div>
+      </div>
+      <div class="card-body">
+        <div class="moa-text">${med.moa}</div>
+        <div class="options-grid">${optionsHTML}</div>
+        <div class="tags-row">${tagsHTML}</div>
+        ${med.note ? `<div class="clinical-note">${med.note}</div>` : ''}
+        ${papCTA}
+      </div>
+    </div>
+  `;
+}
+
+function render() {
+  const filtered = filterMeds();
+  resultsCount.textContent = `${filtered.length} medication${filtered.length !== 1 ? 's' : ''} found`;
+
+  if (filtered.length === 0) {
+    resultsContainer.innerHTML = `
+      <div class="empty-state">
+        <div class="icon">🔍</div>
+        <h3>No results found</h3>
+        <p>Try searching by generic name (e.g. "metformin"), brand name (e.g. "Ozempic"), or drug class (e.g. "SGLT2").</p>
+      </div>
+    `;
+    return;
+  }
+
+  resultsContainer.innerHTML = filtered.map((med, i) => renderCard(med, i)).join('');
+}
+
+// Initialize — load from Google Sheets
+loadData();
+
+// Re-search on input
+searchInput.addEventListener('input', (e) => {
+  searchQuery = e.target.value.toLowerCase().trim();
+  render();
+});
+</script>
+</body>
+</html>
