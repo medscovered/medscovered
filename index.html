@@ -132,10 +132,16 @@
   .filters {
     max-width: 900px;
     margin: 0 auto;
-    padding: 20px 24px 0;
+    padding: 16px 24px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .filter-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
   }
 
@@ -452,29 +458,27 @@
   </div>
 </div>
 
-<div style="background:#fff; border-bottom: 1px solid var(--border); padding: 14px 24px; text-align:center;">
-  <p style="max-width:700px; margin:0 auto; font-size:0.82rem; color:var(--mid); line-height:1.6;">
-    Built by a family medicine physician who got tired of patients not knowing their options at the pharmacy counter. This is free to use. Always will be. — <strong style="color:var(--ink);">Dr. P</strong>
-  </p>
-</div>
 
 <div class="filters">
-  <span class="filter-label">Insurance:</span>
-  <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="uninsured">Uninsured</button>
-  <button class="filter-btn" data-filter="medi-cal">Medi-Cal</button>
-  <button class="filter-btn" data-filter="commercial">Commercial</button>
-  <button class="filter-btn" data-filter="medicare">Medicare</button>
-  <div class="divider"></div>
-  <span class="filter-label">Category:</span>
-  <button class="filter-btn active" data-category="all">All</button>
-  <button class="filter-btn" data-category="diabetes">Diabetes</button>
-  <button class="filter-btn" data-category="inhaler">Inhalers</button>
-  <button class="filter-btn" data-category="doac">Blood Thinners</button>
-  <button class="filter-btn" data-category="weightloss">Weight Loss</button>
-  <button class="filter-btn" data-category="oud">OUD/AUD</button>
-  <button class="filter-btn" data-category="hormone">Hormones</button>
-  <button class="filter-btn" data-category="derm">Derm</button>
+  <div class="filter-row">
+    <span class="filter-label">Insurance:</span>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="uninsured">Uninsured</button>
+    <button class="filter-btn" data-filter="medi-cal">Medi-Cal</button>
+    <button class="filter-btn" data-filter="commercial">Commercial</button>
+    <button class="filter-btn" data-filter="medicare">Medicare</button>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Category:</span>
+    <button class="filter-btn active" data-category="all">All</button>
+    <button class="filter-btn" data-category="diabetes">Diabetes</button>
+    <button class="filter-btn" data-category="inhaler">Inhalers</button>
+    <button class="filter-btn" data-category="doac">Blood Thinners</button>
+    <button class="filter-btn" data-category="weightloss">Weight Loss</button>
+    <button class="filter-btn" data-category="oud">OUD/AUD</button>
+    <button class="filter-btn" data-category="hormone">Hormones</button>
+    <button class="filter-btn" data-category="derm">Derm</button>
+  </div>
 </div>
 
 <div class="results-wrap">
@@ -531,16 +535,57 @@ function parseCSVLine(line) {
   return result;
 }
 
+// ============ SMART URL BUILDER ============
+function buildSmartURL(type, link, generic) {
+  const drug = encodeURIComponent(generic.toLowerCase().split('/')[0].trim().split(' ')[0]);
+  const t = type.toLowerCase();
+  if (t.includes('cost plus')) return `https://costplusdrugs.com/medications/?search=${drug}`;
+  if (t.includes('goodrx') || t.includes('generic cash') || t.includes('generic +')) 
+    return `https://www.goodrx.com/${drug}`;
+  if (t.includes('medicare')) return 'https://www.medicare.gov/drug-coverage-part-d';
+  if (t.includes('walmart')) return 'https://www.walmart.com/pharmacy';
+  return link || '';
+}
+
+function buildLinkText(type, link) {
+  const t = type.toLowerCase();
+  if (t.includes('cost plus')) return 'costplusdrugs.com';
+  if (t.includes('goodrx') || t.includes('generic cash') || t.includes('generic +')) return 'GoodRx.com';
+  if (t.includes('medicare ira') || t.includes('medicare mfn') || t.includes('medicare $35') || t.includes('medicare bridge')) return 'medicare.gov';
+  if (t.includes('walmart') || t.includes('otc')) return 'Walmart Pharmacy';
+  if (t.includes('medi-cal')) return 'medi-calrx.dhcs.ca.gov';
+  if (t.includes('novocare') || t.includes('novo nordisk')) return 'novocare.com';
+  if (t.includes('lillycares') || t.includes('lilly')) return 'lillycares.com';
+  if (t.includes('azandme') || t.includes('az&me')) return 'azandmeapp.com';
+  if (t.includes('bms') || t.includes('bmspaf')) return 'bms.com';
+  if (t.includes('bi cares') || t.includes('boehringer')) return 'boehringer-ingelheim.com';
+  if (t.includes('gsk')) return 'gsk.com';
+  if (t.includes('abbvie')) return 'abbvie.com';
+  if (t.includes('j&j') || t.includes('janssen')) return 'janssencarepath.com';
+  if (t.includes('prescription hope')) return 'prescriptionhope.com';
+  if (t.includes('vivitrol')) return 'vivitrol.com';
+  if (t.includes('indivior') || t.includes('suboxone')) return 'suboxone.com';
+  if (t.includes('lillydirect') || t.includes('lillycard')) return 'lillydirect.com';
+  if (link) {
+    try { return new URL(link).hostname.replace('www.', ''); } catch(e) {}
+  }
+  return 'Learn more';
+}
+
 // ============ TRANSFORM CSV ROW TO MED OBJECT ============
 function rowToMed(row) {
   const options = [];
   for (let i = 1; i <= 4; i++) {
     if (row[`option${i}_type`]) {
+      const type = row[`option${i}_type`];
+      const link = row[`option${i}_link`];
+      const generic = row.generic || '';
       options.push({
-        type: row[`option${i}_type`],
+        type,
         cost: row[`option${i}_cost`],
         detail: row[`option${i}_detail`],
-        link: row[`option${i}_link`],
+        link: buildSmartURL(type, link, generic),
+        linkText: buildLinkText(type, link),
         tier: row[`option${i}_tier`]
       });
     }
