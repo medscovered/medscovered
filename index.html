@@ -849,13 +849,37 @@ function sortMeds(meds) {
 
 function renderCard(med, index) {
   const delay = index * 0.05;
-  const optionsHTML = med.options.map(opt => `
+  const optionsHTML = med.options.map(opt => {
+    const programMatch = PAP_PROGRAMS.find(p => {
+      if (!p.program_id || p.program_id.startsWith('SECTION_')) return false;
+      const t = opt.type.toLowerCase();
+      const pid = p.program_id.toLowerCase();
+      if (t.includes('az&me') || t.includes('azandme')) return pid === 'azandme';
+      if (t.includes('lillycares')) return pid === 'lilly-cares';
+      if (t.includes('lillydirect')) return pid === 'lillydirect';
+      if (t.includes('novo nordisk pap') || t.includes('novocare')) return pid === 'novo-pap';
+      if (t.includes('bmspaf') || t.includes('bms')) return pid === 'bmspaf';
+      if (t.includes('bi cares')) return pid === 'bi-cares';
+      if (t.includes('wegovy savings')) return pid === 'wegovy-card';
+      if (t.includes('vivitrol')) return pid === 'vivitrol';
+      if (t.includes('cost plus')) return pid === 'cost-plus';
+      if (t.includes('goodrx') || t.includes('generic cash')) return pid === 'goodrx';
+      if (t.includes('prior auth') || t.includes('medi-cal') || t.includes('medicare')) return pid === 'prior-auth';
+      if (t.includes('commercial savings') || t.includes('copay cap') || t.includes('copay card')) return pid === 'commercial-savings-card';
+      if (t.includes('walmart')) return pid === 'walmart-otc-insulin';
+      return false;
+    });
+    const linkHTML = programMatch
+      ? `<a href="javascript:void(0)" onclick="showInstructions('${programMatch.program_id}')" class="option-link">→ How to get this</a>`
+      : opt.link ? `<a href="${opt.link}" target="_blank" class="option-link">→ ${opt.linkText}</a>` : '';
+    return `
     <div class="option-tile ${getTierClass(opt.tier)}">
       <div class="option-type">${opt.type}</div>
       <div class="option-cost">${opt.cost}</div>
       <div class="option-detail">${opt.detail}</div>
-      ${opt.link ? `<a href="${opt.link}" target="_blank" class="option-link">→ ${opt.linkText}</a>` : ''}
-    </div>`).join('');
+      ${linkHTML}
+    </div>`;
+  }).join('');
   const tagsHTML = med.tags.map(tag => {
     let cls = 'tag-blue';
     if (tag.includes('✅')) cls = 'tag-green';
@@ -863,13 +887,16 @@ function renderCard(med, index) {
     else if (tag.includes('⚠️') || tag.includes('💡')) cls = 'tag-amber';
     return `<span class="tag ${cls}">${tag}</span>`;
   }).join('');
+  const papProgram = PAP_PROGRAMS.find(p => p.program_name && med.papName && p.program_name.toLowerCase().includes(med.papName.toLowerCase().split(' ')[0]));
   const papCTA = med.pap ? `
     <div class="apply-cta">
       <div class="apply-cta-text">
-        <strong>Patient Assistance Program, We Can Apply For You</strong>
-        ${med.papName} · ${med.papContact}
+        <strong>Patient Assistance Program Available</strong>
+        ${med.papName}${med.papContact && med.papContact !== 'undefined' ? ' · ' + med.papContact : ''}
       </div>
-      <button class="apply-btn" onclick="alert('Coming soon, we will handle the paperwork for you.')">Apply, Coming Soon</button>
+      <button class="apply-btn" onclick="${papProgram ? `showInstructions('${papProgram.program_id}')` : `alert('Coming soon, we will handle the paperwork for you.')`}">
+        ${papProgram ? 'See How to Apply' : 'Apply, Coming Soon'}
+      </button>
     </div>` : '';
   return `
     <div class="med-card" style="animation-delay: ${delay}s">
