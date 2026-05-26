@@ -927,7 +927,11 @@ function render() {
   resultsContainer.innerHTML = filtered.map((med, i) => renderCard(med, i)).join('');
 }
 
+let previousPage = 'home';
+
 function showPage(page) {
+  const current = document.querySelector('.page.active')?.id?.replace('page-', '');
+  if (current && current !== page) previousPage = current;
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
   document.getElementById(`page-${page}`).classList.add('active');
@@ -964,7 +968,7 @@ function showInstructions(id) {
   const steps = [p.step1,p.step2,p.step3,p.step4,p.step5,p.step6,p.step7].filter(s => s && s.trim());
   const stepsHTML = steps.map(s => `<li>${s}</li>`).join('');
   document.getElementById('instructionsContent').innerHTML = `
-    <button class="back-btn" onclick="showPage('how')">Back to all programs</button>
+    <button class="back-btn" onclick="showPage(previousPage)">← Back</button>
     <h2>${p.program_name}</h2>
     <div class="drug-label">${p.drugs}</div>
     <div class="who-qualifies"><strong>Who qualifies</strong>${p.who_qualifies}</div>
