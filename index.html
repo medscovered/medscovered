@@ -203,10 +203,25 @@
     font-weight: 500;
   }
 
-  .sort-label {
-    font-size: 0.78rem;
-    color: var(--mid);
+  .sort-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
+
+  .sort-select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: var(--ink);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 5px 10px;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .sort-select:focus { border-color: var(--teal); }
 
   /* MED CARD */
   .med-card {
@@ -484,7 +499,15 @@
 <div class="results-wrap">
   <div class="results-header">
     <span class="results-count" id="resultsCount"></span>
-    <span class="sort-label">Cheapest options first</span>
+    <div class="sort-wrap">
+      <span class="sort-label">Sort:</span>
+      <select id="sortSelect" class="sort-select">
+        <option value="cheap-first">$ → $$$</option>
+        <option value="expensive-first">$$$ → $</option>
+        <option value="drug-class">Drug Class</option>
+        <option value="az">A → Z</option>
+      </select>
+    </div>
   </div>
   <div id="resultsContainer"></div>
 </div>
@@ -713,6 +736,23 @@ function getTierClass(tier) {
   return map[tier] || "moderate";
 }
 
+const COST_ORDER = { free: 0, cheap: 1, moderate: 2, expensive: 3 };
+
+function sortMeds(meds) {
+  const val = document.getElementById('sortSelect').value;
+  const sorted = [...meds];
+  if (val === 'cheap-first') {
+    sorted.sort((a, b) => (COST_ORDER[a.costTier] || 0) - (COST_ORDER[b.costTier] || 0));
+  } else if (val === 'expensive-first') {
+    sorted.sort((a, b) => (COST_ORDER[b.costTier] || 0) - (COST_ORDER[a.costTier] || 0));
+  } else if (val === 'drug-class') {
+    sorted.sort((a, b) => a.drugClass.localeCompare(b.drugClass));
+  } else if (val === 'az') {
+    sorted.sort((a, b) => a.generic.localeCompare(b.generic));
+  }
+  return sorted;
+}
+
 function renderCard(med, index) {
   const delay = index * 0.05;
   const optionsHTML = med.options.map(opt => `
@@ -763,7 +803,7 @@ function renderCard(med, index) {
 }
 
 function render() {
-  const filtered = filterMeds();
+  const filtered = sortMeds(filterMeds());
   resultsCount.textContent = `${filtered.length} medication${filtered.length !== 1 ? 's' : ''} found`;
 
   if (filtered.length === 0) {
@@ -788,6 +828,9 @@ searchInput.addEventListener('input', (e) => {
   searchQuery = e.target.value.toLowerCase().trim();
   render();
 });
+
+// Sort
+document.getElementById('sortSelect').addEventListener('change', render);
 </script>
 </body>
 </html>
